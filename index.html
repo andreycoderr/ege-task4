@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Тренажёр для подготовки к заданию 4 ЕГЭ по русскому языку — орфоэпические нормы (ударение)." />
+  <title>ЕГЭ · Задание 4 — тренажёр ударений</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1>Задание 4 ЕГЭ · ударения</h1>
+      <p class="subtitle">В одном из приведённых ниже слов допущена ошибка в постановке ударения. Выпишите это слово.</p>
+    </header>
+
+    <section class="board" id="board" aria-live="polite"></section>
+
+    <section class="feedback" id="feedback" hidden></section>
+
+    <section class="controls">
+      <button id="next-btn" class="btn btn-primary" type="button" hidden>Дальше →</button>
+      <button id="reset-btn" class="btn btn-ghost" type="button">Сбросить счёт</button>
+    </section>
+
+    <footer class="footer">
+      <div class="score" id="score">0 / 0</div>
+      <a class="src" href="https://github.com/andreycoderr/ege-task4" target="_blank" rel="noopener">исходники</a>
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
