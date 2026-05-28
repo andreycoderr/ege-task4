@@ -89,16 +89,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  text-decoration: none;
   color: inherit;
   padding: 6px 10px 6px 6px;
   border-radius: 999px;
   background: var(--paper);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-sm);
-  transition: transform .15s ease, box-shadow .15s ease;
 }
-.brand:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
 
 .brand-mark {
   width: 34px;
@@ -383,46 +380,6 @@ body {
 .btn-arrow { transition: transform .15s ease; }
 .btn:hover .btn-arrow { transform: translateX(3px); }
 
-/* ---------- Promo card ---------- */
-.promo {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  background: var(--ink);
-  background-image: linear-gradient(135deg, #1a1d2e 0%, #2d3146 100%);
-  border-color: transparent;
-  color: #f5f1e8;
-  position: relative;
-  overflow: hidden;
-}
-.promo::before {
-  content: "";
-  position: absolute;
-  inset: -40% -10% auto auto;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(240, 134, 110, .35) 0%, transparent 60%);
-  pointer-events: none;
-}
-.promo-text { flex: 1; position: relative; }
-.promo h2 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 22px;
-  margin: 0 0 6px;
-  letter-spacing: -.01em;
-}
-.promo p { margin: 0; color: rgba(245, 241, 232, .72); font-size: 14.5px; max-width: 380px; }
-
-.btn-promo {
-  background: var(--grad-warm);
-  color: #fff;
-  box-shadow: 0 8px 22px rgba(210, 61, 53, .35);
-  position: relative;
-  z-index: 1;
-}
-.btn-promo:hover { filter: brightness(1.05); }
-
 /* ---------- Sticky CTA ---------- */
 .cta-sticky {
   position: fixed;
@@ -488,9 +445,6 @@ body {
   .stats { padding: 12px 4px; }
   .stat-num { font-size: 19px; }
   .stat-label { font-size: 10.5px; }
-  .promo { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .promo h2 { font-size: 19px; }
-  .btn-promo { width: 100%; justify-content: center; }
   .cta-sticky { padding: 10px 16px 10px 10px; gap: 10px; }
   .cta-content strong { font-size: 14px; }
   .cta-sub { font-size: 11.5px; }
