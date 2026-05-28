@@ -9,7 +9,6 @@
     return VOWELS_LOWER.includes(ch.toLowerCase());
   }
 
-  // Index of the stressed letter. For Ё/ё it's always stressed.
   function stressIndex(word) {
     for (let i = 0; i < word.length; i++) {
       if (STRESSED_VOWELS.has(word[i])) return i;
@@ -27,11 +26,9 @@
     return out;
   }
 
-  // Move stress to a different vowel. Returns null if impossible.
   function makeWrongStress(word) {
     const others = otherVowelPositions(word);
     if (others.length === 0) return null;
-    // Lowercase the original stressed letter (preserve Ё as ё when moving away — rare in our list).
     const lower = word
       .split("")
       .map((ch, i) => (i === stressIndex(word) ? ch.toLowerCase() : ch))
@@ -49,8 +46,6 @@
     return a;
   }
 
-  // Render a word: stressed letter in uppercase wrapped in <span class="s">,
-  // the rest in lowercase. Matches the FIPI textbook style.
   function renderWord(word) {
     const sIdx = stressIndex(word);
     return word
@@ -65,9 +60,12 @@
   // ---- State ----
   const POOL = (window.WORDS || []).filter(w => otherVowelPositions(w).length > 0);
   let recentlyUsed = new Set();
-  let score = { correct: 0, total: 0 };
-  let round = null; // { items: [{display, original, isWrong}], wrongIdx }
+  let score = { correct: 0, total: 0, streak: 0 };
+  let qnum = 0;
+  let round = null;
   let answered = false;
+
+  function hasYo(w) { return /[ёЁ]/.test(w); }
 
   function pickRound() {
     if (recentlyUsed.size > POOL.length - ROUND_SIZE) recentlyUsed = new Set();
@@ -75,7 +73,14 @@
     const picked = fresh.slice(0, ROUND_SIZE);
     picked.forEach(w => recentlyUsed.add(w));
 
-    const wrongIdx = Math.floor(Math.random() * ROUND_SIZE);
+    // Prefer non-Ё words as the "wrong" candidate — Ё is always stressed in Russian,
+    // so a wrong-stress version conflicts with the letter itself.
+    const nonYoIdxs = picked
+      .map((w, i) => (hasYo(w) ? -1 : i))
+      .filter(i => i !== -1);
+    const wrongPool = nonYoIdxs.length > 0 ? nonYoIdxs : picked.map((_, i) => i);
+    const wrongIdx = wrongPool[Math.floor(Math.random() * wrongPool.length)];
+
     const items = picked.map((w, i) => {
       if (i === wrongIdx) {
         const wrong = makeWrongStress(w);
@@ -91,7 +96,11 @@
   const feedbackEl = document.getElementById("feedback");
   const nextBtn = document.getElementById("next-btn");
   const resetBtn = document.getElementById("reset-btn");
-  const scoreEl = document.getElementById("score");
+  const qnumEl = document.getElementById("qnum");
+  const scoreCorrectEl = document.getElementById("score-correct");
+  const scoreTotalEl = document.getElementById("score-total");
+  const scoreStreakEl = document.getElementById("score-streak");
+  const scoreAccEl = document.getElementById("score-acc");
 
   function renderBoard() {
     boardEl.innerHTML = "";
@@ -104,20 +113,24 @@
         <span class="num">${i + 1}</span>
         <span class="word">${renderWord(it.display)}</span>
       `;
-      btn.addEventListener("click", () => onAnswer(i, btn));
+      btn.addEventListener("click", () => onAnswer(i));
       boardEl.appendChild(btn);
     });
   }
 
-  function onAnswer(index, btn) {
+  function onAnswer(index) {
     if (answered) return;
     answered = true;
     const item = round.items[index];
     score.total += 1;
     const isCorrect = item.isWrong;
-    if (isCorrect) score.correct += 1;
+    if (isCorrect) {
+      score.correct += 1;
+      score.streak += 1;
+    } else {
+      score.streak = 0;
+    }
 
-    // Highlight chosen and reveal correct one.
     const buttons = boardEl.querySelectorAll(".word-btn");
     buttons.forEach((b, i) => {
       b.disabled = true;
@@ -127,19 +140,27 @@
 
     const correctWord = round.items[round.wrongIdx];
     feedbackEl.hidden = false;
-    feedbackEl.classList.toggle("ok", isCorrect);
-    feedbackEl.classList.toggle("err", !isCorrect);
+    feedbackEl.classList.remove("ok", "err");
+    feedbackEl.classList.add(isCorrect ? "ok" : "err");
     feedbackEl.innerHTML = isCorrect
       ? `Верно! Ошибка была в слове <strong>${renderWord(correctWord.display)}</strong> — правильно: <strong>${renderWord(correctWord.original)}</strong>.`
-      : `Не угадал. Ошибка в слове <strong>${renderWord(correctWord.display)}</strong> — правильно: <strong>${renderWord(correctWord.original)}</strong>.`;
+      : `Неверно. Ошибка была в слове <strong>${renderWord(correctWord.display)}</strong> — правильно: <strong>${renderWord(correctWord.original)}</strong>.`;
 
     nextBtn.hidden = false;
-    nextBtn.focus();
+    nextBtn.focus({ preventScroll: true });
     updateScore();
   }
 
   function updateScore() {
-    scoreEl.textContent = `${score.correct} / ${score.total}`;
+    scoreCorrectEl.textContent = String(score.correct);
+    scoreTotalEl.textContent = String(score.total);
+    scoreStreakEl.textContent = String(score.streak);
+    if (score.total === 0) {
+      scoreAccEl.textContent = "—";
+    } else {
+      const pct = Math.round((score.correct / score.total) * 100);
+      scoreAccEl.textContent = pct + "%";
+    }
   }
 
   function startRound() {
@@ -148,13 +169,16 @@
     feedbackEl.classList.remove("ok", "err");
     feedbackEl.innerHTML = "";
     nextBtn.hidden = true;
+    qnum += 1;
     round = pickRound();
     renderBoard();
+    qnumEl.textContent = String(qnum);
   }
 
   nextBtn.addEventListener("click", startRound);
   resetBtn.addEventListener("click", () => {
-    score = { correct: 0, total: 0 };
+    score = { correct: 0, total: 0, streak: 0 };
+    qnum = 0;
     recentlyUsed = new Set();
     updateScore();
     startRound();

@@ -2,32 +2,96 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Тренажёр для подготовки к заданию 4 ЕГЭ по русскому языку — орфоэпические нормы (ударение)." />
-  <title>ЕГЭ · Задание 4 — тренажёр ударений</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Тренажёр для подготовки к заданию 4 ЕГЭ по русскому языку — орфоэпические нормы (ударение). От репетитора Арины Галицкой." />
+  <meta name="theme-color" content="#f6f1e7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c0e15" media="(prefers-color-scheme: dark)" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+  <title>Учительская · Задание 4 ЕГЭ — тренажёр ударений</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="app">
-    <header class="header">
-      <h1>Задание 4 ЕГЭ · ударения</h1>
-      <p class="subtitle">В одном из приведённых ниже слов допущена ошибка в постановке ударения. Выпишите это слово.</p>
+  <div class="page">
+    <header class="hero">
+      <a class="brand" href="https://t.me/UchitelskayaAG" target="_blank" rel="noopener" aria-label="Канал Учительская в Telegram">
+        <span class="brand-mark" aria-hidden="true">Ё</span>
+        <span class="brand-text">
+          <span class="brand-name">Учительская</span>
+          <span class="brand-by">Арина Галицкая · ЕГЭ по русскому</span>
+        </span>
+      </a>
+
+      <div class="hero-body">
+        <span class="eyebrow">Задание 4 · орфоэпические нормы</span>
+        <h1 class="hero-title">Найди слово, в котором <em>ударение</em> поставлено неверно</h1>
+        <p class="hero-sub">Тренажёр на основе официального орфоэпического минимума ФИПИ. Тренируйся в формате ЕГЭ — клик за кликом.</p>
+      </div>
+
+      <div class="stats" role="status" aria-label="Текущий счёт">
+        <div class="stat">
+          <span class="stat-num" id="score-correct">0</span>
+          <span class="stat-label">верно</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num" id="score-total">0</span>
+          <span class="stat-label">всего</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num" id="score-streak">0</span>
+          <span class="stat-label">подряд</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num" id="score-acc">—</span>
+          <span class="stat-label">точность</span>
+        </div>
+      </div>
     </header>
 
-    <section class="board" id="board" aria-live="polite"></section>
+    <main class="content">
+      <section class="card question">
+        <div class="question-head">
+          <span class="qnum"><span id="qnum">1</span></span>
+          <p class="qtext">В одном из приведённых ниже слов допущена ошибка в постановке ударения. Выбери это слово.</p>
+        </div>
+        <div class="board" id="board" aria-live="polite"></div>
+        <div class="feedback" id="feedback" hidden></div>
+        <div class="controls">
+          <button id="next-btn" class="btn btn-primary" type="button" hidden>
+            <span>Следующее задание</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+          <button id="reset-btn" class="btn btn-ghost" type="button">Сбросить счёт</button>
+        </div>
+      </section>
 
-    <section class="feedback" id="feedback" hidden></section>
+      <aside class="card promo">
+        <div class="promo-text">
+          <h2>Хочешь разобрать ошибки лично?</h2>
+          <p>Индивидуальные занятия с Ариной — разбор слабых мест, стратегия экзамена и работа с реальными вариантами ЕГЭ.</p>
+        </div>
+        <a class="btn btn-promo" href="https://t.me/ArinaGalitskaya" target="_blank" rel="noopener">
+          Написать в Telegram
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </aside>
+    </main>
+  </div>
 
-    <section class="controls">
-      <button id="next-btn" class="btn btn-primary" type="button" hidden>Дальше →</button>
-      <button id="reset-btn" class="btn btn-ghost" type="button">Сбросить счёт</button>
-    </section>
-
-    <footer class="footer">
-      <div class="score" id="score">0 / 0</div>
-      <a class="src" href="https://github.com/andreycoderr/ege-task4" target="_blank" rel="noopener">исходники</a>
-    </footer>
-  </main>
+  <a class="cta-sticky" href="https://t.me/ArinaGalitskaya" target="_blank" rel="noopener" aria-label="Записаться на занятие с Ариной в Telegram">
+    <span class="cta-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M9.04 15.66 8.85 19.4c.27 0 .39-.11.53-.25l1.27-1.21 2.63 1.93c.48.27.83.13.95-.45l1.72-8.07.01-.01c.16-.74-.27-1.03-.74-.85L4.06 14.36c-.73.28-.72.69-.12.87l2.6.81 6.05-3.81c.29-.18.55-.08.34.1z"/></svg>
+    </span>
+    <span class="cta-content">
+      <strong>Записаться на занятие с Ариной</strong>
+      <span class="cta-sub">персональный разбор по ЕГЭ · Telegram</span>
+    </span>
+    <span class="cta-arrow" aria-hidden="true">→</span>
+  </a>
 
   <script src="data.js"></script>
   <script src="app.js"></script>
